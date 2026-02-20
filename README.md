@@ -11,7 +11,7 @@ A simple ToDo application to help you manage your daily tasks efficiently.
 ## Screenshots
 
 Main screen:  
-![Main Screen](Image/main_screen1.png),
+![Main Screen]([Image/main_screen1.png](https://github.com/AlinaYuhai/ToDoApp/blob/main/Image%3Amain.screen1.png)),
 
 Main screen2:  
 ![Main Screen2](Image/main.screen2.png)
