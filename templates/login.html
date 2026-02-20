@@ -1,18 +1,18 @@
 {% extends "base.html" %}
-{% block title %}Register{% endblock %}
-
+{% block title %}Login{% endblock %}
 {% block content %}
-<h2 class="mb-4">{{ 'Register' if 'register' in request.path else 'Login' }}</h2>
+<h2>Login</h2>
 <form method="POST">
     {{ form.hidden_tag() }}
-    <div class="mb-3">
-        {{ form.username.label(class="form-label") }}
-        {{ form.username(class="form-control") }}
+    <div>
+        {{ form.username.label }} {{ form.username() }}
     </div>
-    <div class="mb-3">
-        {{ form.password.label(class="form-label") }}
-        {{ form.password(class="form-control") }}
+    <div>
+        {{ form.password.label }} {{ form.password() }}
     </div>
-    <button type="submit" class="btn btn-primary">{{ 'Register' if 'register' in request.path else 'Login' }}</button>
+    <button type="submit">Login</button>
 </form>
+{% for message in get_flashed_messages() %}
+<p style="color:red;">{{ message }}</p>
+{% endfor %}
 {% endblock %}
