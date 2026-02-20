@@ -11,7 +11,7 @@ A simple ToDo application to help you manage your daily tasks efficiently.
 ## Screenshots
 
 Main screen:  
-![Main Screen](Image/main.screen1.png)),
+![Main Screen](Image/main.screen1.png))
 
 Main screen2:  
 ![Main Screen2](Image/main.screen2.png)
@@ -20,7 +20,7 @@ Adding a task:
 ![Add Task](Image/Addingtask.png)
 
 Task completed:  
-![Task Completed](Image/Taskcompleted.png),
+![Task Completed](Image/Taskcompleted.png)
 
 Demo GIF:  
 ![Demo GIF](Image/demo.gif)
