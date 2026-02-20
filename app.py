@@ -1,39 +1,92 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import InputRequired
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-
-from models import db, User, Todo
-from forms import RegistrationForm, LoginForm, TodoForm
+import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "secret123"
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_secret_key')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db.init_app(app)
+db = SQLAlchemy(app)
 
-# создаём таблицы сразу
-with app.app_context():
-    db.create_all()
+# Модели
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
 
-login_manager = LoginManager()
-login_manager.login_view = "login"
-login_manager.init_app(app)
+class Todo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    task = db.Column(db.String(200), nullable=False)
+    completed = db.Column(db.Boolean, default=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+# Формы
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[InputRequired()])
+    password = PasswordField('Password', validators=[InputRequired()])
+    submit = SubmitField('Login')
 
+class TaskForm(FlaskForm):
+    task = StringField('Task', validators=[InputRequired()])
+    submit = SubmitField('Add Task')
 
-with app.app_context():
-    db.create_all()
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    form = RegistrationForm()
+# Роуты
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data, password=hashed_password)
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and check_password_hash(user.password, form.password.data):
+            # сохраняем user_id в сессии
+            request.environ['user_id'] = user.id
+            return redirect(url_for('index', user_id=user.id))
+        else:
+            flash('Invalid credentials')
+    return render_template('login.html', form=form)
+
+@app.route('/index/<int:user_id>', methods=['GET', 'POST'])
+def index(user_id):
+    form = TaskForm()
+    todos = Todo.query.filter_by(user_id=user_id).all()
+    if form.validate_on_submit():
+        new_task = Todo(task=form.task.data, user_id=user_id)
+        db.session.add(new_task)
+        db.session.commit()
+        return redirect(url_for('index', user_id=user_id))
+    return render_template('index.html', form=form, todos=todos)
+
+@app.route('/toggle/<int:todo_id>')
+def toggle(todo_id):
+    todo = Todo.query.get_or_404(todo_id)
+    todo.completed = not todo.completed
+    db.session.commit()
+    return redirect(url_for('index', user_id=todo.user_id))
+
+@app.route('/delete/<int:todo_id>')
+def delete(todo_id):
+    todo = Todo.query.get_or_404(todo_id)
+    user_id = todo.user_id
+    db.session.delete(todo)
+    db.session.commit()
+    return redirect(url_for('index', user_id=user_id))
+
+# Создание базы при первом запуске
+with app.app_context():
+    db.create_all()
+    # создаём тестового пользователя, если нет
+    if not User.query.filter_by(username='admin').first():
+        hashed_pw = generate_password_hash('1234')
+        user = User(username='admin', password=hashed_pw)
+        db.session.add(user)
+        db.session.commit()
+
+if __name__ == '__main__':
+    app.run(debug=True)
         db.session.add(new_user)
         db.session.commit()
         flash("Account created!", "success")
