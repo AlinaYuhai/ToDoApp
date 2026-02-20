@@ -17,7 +17,7 @@ Main screen2:
 ![Main Screen2](Image/main.screen2.png)
 
 Adding a task:  
-![Add Task](Image/Addingatask.png)
+![Add Task](Image/Addingtask.png)
 
 Task completed:  
 ![Task Completed](Image/Taskcompleted.png),
