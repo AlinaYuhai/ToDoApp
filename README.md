@@ -4,24 +4,26 @@ A simple ToDo application to help you manage your daily tasks efficiently.
 
 ## Features
 
-- Add, edit, and delete tasks
-- Mark tasks as completed
-- Responsive and user-friendly interface
+- ✅ Add, edit, and delete tasks
+- ✅ Mark tasks as completed
+- ✅ Responsive and user-friendly interface
 
 ## Screenshots
 
 Main screen:  
-![Register](<>)
-![Login](<>)
+![Main Screen](Image/main_screen1.png),
+
+Main screen2:  
+![Main Screen2](Image/main.screen2.png)
 
 Adding a task:  
-![Add Task](<>)
+![Add Task](Image/Addingatask.png)
 
 Task completed:  
-![Task Completed](<>)
+![Task Completed](Image/Taskcompleted.png),
 
 Demo GIF:  
-![Demo GIF]()
+![Demo GIF](Image/demo.gif)
 
 ## Installation
 
@@ -29,12 +31,12 @@ Demo GIF:
    ```bash
    git clone https://github.com/AlinaYuhai/ToDoApp.git
 
-2. Navigate to the project folder:
-   cd ToDoApp.
+
+2. Navigate to the project folder: cd ToDoApp
 
 3. Open index.html in your browser (or run according to your framework setup).
 
-4. Usage
+Usage
 Add new tasks using the input field.
 Click on a task to mark it as completed.
 Delete tasks using the delete button next to each task.
@@ -45,3 +47,4 @@ Feel free to open an issue or submit a pull request.
 
 License
 This project is licensed under the MIT License.
+
