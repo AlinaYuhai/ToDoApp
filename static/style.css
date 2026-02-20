@@ -1,0 +1,24 @@
+body {
+    background-color: #f0f2f5;
+}
+
+.task-column {
+    min-height: 400px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 8px;
+}
+
+.card {
+    cursor: grab;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.text-decoration-line-through {
+    opacity: 0.6;
+}
